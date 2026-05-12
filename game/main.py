@@ -47,11 +47,12 @@ class Game(ShowBase):
     def update(self, task):
 
         dt = globalClock.getDt()
-
+        dt= min(dt,0.05)
         # Prevent giant physics jumps during lag
         dt = min(dt, 0.05)
 
-        self.player.update(dt)
+        if self.player.is_dead():
+            self.player.respawn()
 
         self.smooth_camera(dt)
 

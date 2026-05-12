@@ -9,7 +9,7 @@ GRAVITY          = -40.0
 JUMP_FORCE       = 16.0
 COYOTE_TIME      = 0.1   # seconds after walking off edge you can still jump
 JUMP_BUFFER_TIME = 0.1   # seconds before landing that jump input is remembered
-
+DEATH_PLANE= -20.0
 PLAYER_W = 0.8
 PLAYER_H = 1.0
 
@@ -71,7 +71,14 @@ class Player(DirectObject):
     # -------------------------------------------------
     # INPUT
     # -------------------------------------------------
-
+    def _handle_vertical(self, dt):
+        ...
+        if self.jump_bummer_timer >0 and can_jump:
+            self.vz= JUMP_FORCE
+            self.jump_buffer_timer =0
+            self.coyote_timer=0
+            self.on_ground= False
+            self._just_jumped= True
     def set_left(self, val):
         self.left = val
 
@@ -95,7 +102,16 @@ class Player(DirectObject):
     # -------------------------------------------------
     # MAIN UPDATE
     # -------------------------------------------------
-
+    def is_dead(self):
+        return self.z < DEATH_PLANE
+    def respawn(self):
+        self.x= 4.0
+        self.z =8.0
+        self.vx=0.0
+        self.vz =0.0
+        self.on_ground=False
+        self.coyote_timer=0.0
+        self.jump_buffer_timer=0.0
     def update(self, dt):
         self._handle_horizontal(dt)
         self._handle_vertical(dt)
@@ -222,9 +238,9 @@ class Player(DirectObject):
                     self.on_ground = True
 
         # Start coyote timer when leaving edge
-        if was_on_ground and not self.on_ground:
+        if was_on_ground and not self.on_ground and not self._just_jumped:
             self.coyote_timer = COYOTE_TIME
-
+        self._just_jumped= False
     # -------------------------------------------------
     # TIMERS
     # -------------------------------------------------
