@@ -18,6 +18,8 @@ class Player(DirectObject):
 
     def __init__(self, base, level):
         super().__init__()
+        self.jump_held=False
+        
 
         self.base = base
         self.level = level
@@ -40,6 +42,7 @@ class Player(DirectObject):
         self.on_ground = False
         self.coyote_timer = 0.0
         self.jump_buffer_timer = 0.0
+        self._just_jumped=False
 
         # Jump hold
         self.jump_held = False
@@ -71,14 +74,6 @@ class Player(DirectObject):
     # -------------------------------------------------
     # INPUT
     # -------------------------------------------------
-    def _handle_vertical(self, dt):
-        ...
-        if self.jump_bummer_timer >0 and can_jump:
-            self.vz= JUMP_FORCE
-            self.jump_buffer_timer =0
-            self.coyote_timer=0
-            self.on_ground= False
-            self._just_jumped= True
     def set_left(self, val):
         self.left = val
 
@@ -168,7 +163,7 @@ class Player(DirectObject):
         can_jump = self.on_ground or self.coyote_timer > 0
 
         if self.jump_buffer_timer > 0 and can_jump:
-
+            self._just_jumped=True
             self.vz = JUMP_FORCE
 
             self.jump_buffer_timer = 0

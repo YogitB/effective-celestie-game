@@ -45,8 +45,9 @@ class Game(ShowBase):
     # -----------------------------------
 
     def update(self, task):
-
+        
         dt = globalClock.getDt()
+        self.player.update(dt)
         dt= min(dt,0.05)
         # Prevent giant physics jumps during lag
         dt = min(dt, 0.05)
