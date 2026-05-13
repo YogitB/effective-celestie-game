@@ -1,5 +1,11 @@
 from panda3d.core import Vec3
-
+# 0= air, 1=solid tiles
+# ' ' = air
+# '1' = solid (green/grass)
+# 'i' = ice (slippery, light blue)
+# '^' = spike (kills player)
+# 'S' = spawn point
+# 'E' = end/goal
 # Each tile is 2x2 world units
 TILE_SIZE = 2
 
@@ -9,12 +15,12 @@ TILEMAP = [
     "                              ",
     "                              ",
     "                              ",
-    "          111                 ",
+    "          1112                 ",
     "                              ",
     "       111      1111          ",
     "                              ",
     "  111                   111   ",
-    "                              ",
+    "     22222    2222            ",
     "111111111111111111111111111111",
 ]
 
@@ -24,6 +30,7 @@ class Tile:
         self.z = z
         self.size = size
         self.node = node
+        
 
     def get_rect(self):
         half = self.size / 2
