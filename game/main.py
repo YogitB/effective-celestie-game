@@ -1,6 +1,8 @@
 from direct.showbase.ShowBase import ShowBase
 from direct.task import Task
 from panda3d.core import OrthographicLens
+from panda3d.core import ClockObject
+
 
 from level import Level
 from player import Player
@@ -46,7 +48,7 @@ class Game(ShowBase):
 
     def update(self, task):
         
-        dt = globalClock.getDt()
+        dt= min(ClockObject.getGlobalClock().getDt(), 0.05) # This is confusing, it clamps first
         self.player.update(dt)
         dt= min(dt,0.05)
         # Prevent giant physics jumps during lag
