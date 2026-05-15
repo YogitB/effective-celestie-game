@@ -31,8 +31,9 @@ class Player(DirectObject):
         self.node.setColor(0.9, 0.3, 0.3, 1)
 
         # Spawn position
-        self.x = 4.0
-        self.z = 8.0
+        self.x = float(self.level.spawn.x)
+
+        self.z = float(self.level.spawn.z)
 
         # Velocity
         self.vx = 0.0
@@ -71,9 +72,7 @@ class Player(DirectObject):
         self.accept("arrow_up", self.jump_pressed)
         self.accept("arrow_up-up", self.jump_released)
 
-    # -------------------------------------------------
-    # INPUT
-    # -------------------------------------------------
+  
     def set_left(self, val):
         self.left = val
 
@@ -94,14 +93,13 @@ class Player(DirectObject):
         if self.vz > 0:
             self.vz *= 0.5
 
-    # -------------------------------------------------
-    # MAIN UPDATE
-    # -------------------------------------------------
+  
     def is_dead(self):
         return self.z < DEATH_PLANE
     def respawn(self):
-        self.x= 4.0
-        self.z =8.0
+        self.x= float(self.level.spawn.x)
+        self.z = float(self.level.spawn.z)
+
         self.vx=0.0
         self.vz =0.0
         self.on_ground=False
@@ -115,10 +113,10 @@ class Player(DirectObject):
 
         # Update visual position
         self.node.setPos(self.x, 0, self.z)
+        if self.is_dead():
+            return "dead"
+        return "alive"
 
-    # -------------------------------------------------
-    # HORIZONTAL MOVEMENT
-    # -------------------------------------------------
 
     def _handle_horizontal(self, dt):
 
@@ -150,10 +148,7 @@ class Player(DirectObject):
             elif self.vx < 0:
                 self.vx = min(0, self.vx + FRICTION * dt)
 
-    # -------------------------------------------------
-    # VERTICAL MOVEMENT
-    # -------------------------------------------------
-
+  
     def _handle_vertical(self, dt):
 
         # Gravity
@@ -170,9 +165,6 @@ class Player(DirectObject):
             self.coyote_timer = 0
             self.on_ground = False
 
-    # -------------------------------------------------
-    # COLLISION
-    # -------------------------------------------------
 
     def _collide_and_move(self, dt):
 
@@ -236,9 +228,7 @@ class Player(DirectObject):
         if was_on_ground and not self.on_ground and not self._just_jumped:
             self.coyote_timer = COYOTE_TIME
         self._just_jumped= False
-    # -------------------------------------------------
-    # TIMERS
-    # -------------------------------------------------
+  #Timers
 
     def _tick_timers(self, dt):
 

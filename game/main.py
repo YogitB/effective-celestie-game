@@ -47,10 +47,38 @@ class Game(ShowBase):
         self.death_timer = 0.0
         self.DEATH_DELAY = 0.6  # seconds before respawn
 
-        # -----------------------------------
-        # GAME LOOP
-        # -----------------------------------
-
         self.taskMgr.add(self.update, "update")
 
-    # -------------------------
+    def update(self, task):
+        dt = globalClock().getDt()
+
+        # Screen shake
+        if self.shake_timer > 0:
+            self.shake_timer -= dt
+            import random
+            ox = random.uniform(-1, 1) * self.shake_intensity
+            oz = random.uniform(-1, 1) * self.shake_intensity
+            self.camera.setPos(ox, -50, oz)
+        else:
+            self.camera.setPos(0, -50, 0)
+
+        # Death + respawn delay
+        if self.death_timer > 0:
+            self.death_timer -= dt
+            if self.death_timer <= 0:
+                self.player.respawn()
+            return Task.cont
+
+        # Update player
+        result = self.player.update(dt)
+
+        if result == "dead":
+            self.death_timer = self.DEATH_DELAY
+            self.shake_timer = 0.3
+            self.shake_intensity = 0.4
+
+        return Task.cont
+
+
+game = Game()
+game.run()
