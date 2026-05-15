@@ -1,7 +1,7 @@
 from direct.showbase.ShowBase import ShowBase
 from direct.task import Task
 from panda3d.core import OrthographicLens, ClockObject, WindowProperties
-
+import traceback
 from level import Level
 from player import Player
 
@@ -20,9 +20,8 @@ class Game(ShowBase):
         self.win.requestProperties(props)
 
         # Cap framerate to 60fps
-        ClockObject.getGlobalClock().setMode(ClockObject.MLimited)
-        ClockObject.getGlobalClock().setFrameRate(60)
-
+        globalClock.setMode(ClockObject.M_limited)
+        globalClock.setFrameRate(60)
         # -----------------------------------
         # CAMERA
         # -----------------------------------
@@ -50,8 +49,7 @@ class Game(ShowBase):
         self.taskMgr.add(self.update, "update")
 
     def update(self, task):
-        dt = globalClock().getDt()
-
+        dt = globalClock.getDt()
         # Screen shake
         if self.shake_timer > 0:
             self.shake_timer -= dt
@@ -79,6 +77,9 @@ class Game(ShowBase):
 
         return Task.cont
 
-
-game = Game()
-game.run()
+try:
+    game = Game()
+    game.run()
+except Exception as e:
+    traceback.print_exc()
+    input("Type enter to close: ")

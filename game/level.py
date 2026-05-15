@@ -153,3 +153,4 @@ class Level:
             if l <= wx < r and b <= wz < t:
                 return tile
         return None
+print(f"Spawn: {self.spawn}, Goal: {self.goal}")
