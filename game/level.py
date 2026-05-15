@@ -25,7 +25,6 @@ TILEMAP = [
 ]
 
 
-# --- Tile type definitions ---
 
 TILE_TYPES = {
     "1": {
@@ -87,12 +86,11 @@ class Tile:
         self.tile_type = tile_type
 
     def get_rect(self):
-        """Returns (left, bottom, right, top) in world units."""
+        
         half = self.size / 2
         return (self.x - half, self.z - half, self.x + half, self.z + half)
 
     def overlaps(self, left, bottom, right, top) -> bool:
-        """AABB check: does this tile overlap the given rect?"""
         tl, tb, tr, tt = self.get_rect()
         return right > tl and left < tr and top > tb and bottom < tt
 
@@ -105,9 +103,7 @@ class Level:
         self.goal   = Vec3(0, 0, 0)
         self._build()
 
-    # ------------------------------------------------------------------
-    # Build
-    # ------------------------------------------------------------------
+    # 
 
     def _build(self):
         rows = list(reversed(TILEMAP))  # row 0 = bottom of map
@@ -126,7 +122,6 @@ class Level:
         model.setPos(x, 0, z)
 
         if tile_type == "^":
-            # Spikes are thin — half height, full width
             model.setScale(TILE_SIZE / 2, TILE_SIZE / 2, TILE_SIZE / 4)
         else:
             model.setScale(TILE_SIZE / 2)
@@ -142,9 +137,8 @@ class Level:
         if tile.is_goal:
             self.goal = Vec3(x, 0, z + TILE_SIZE)
 
-    # ------------------------------------------------------------------
-    # Queries (called by player/game logic each frame)
-    # ------------------------------------------------------------------
+    # 
+    # 
 
     def get_solid_tiles(self) -> list[Tile]:
         return [t for t in self.tiles if t.solid]
