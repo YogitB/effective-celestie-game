@@ -1,4 +1,5 @@
 from panda3d.core import Vec3
+from direct.actor.Actor import Actor
 from direct.showbase.DirectObject import DirectObject
 
 # Tuning constants — tweak these to feel right
@@ -25,10 +26,10 @@ class Player(DirectObject):
         self.level = level
 
         # Visual player model
-        self.node = base.loader.loadModel("models/box")
+        self.node = base.loader.loadModel("models/smiley")
         self.node.reparentTo(base.render)
         self.node.setScale(PLAYER_W / 2, 0.5, PLAYER_H / 2)
-        self.node.setColor(0.9, 0.3, 0.3, 1)
+        self.node.setColor(1.0, 0.34, 0.78, 1)
 
         # Spawn position
         self.x = float(self.level.spawn.x)

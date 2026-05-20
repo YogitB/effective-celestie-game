@@ -4,27 +4,20 @@ from panda3d.core import OrthographicLens, ClockObject, WindowProperties
 import traceback
 from level import Level
 from player import Player
-
-
 class Game(ShowBase):
-
     def __init__(self):
         super().__init__()
-
-        self.disableMouse()
+        lens.setFov(45)
         self.setBackgroundColor(0.1, 0.1, 0.15, 1)
-
+        self.disableMouse()
         # Window title
         props = WindowProperties()
         props.setTitle("Celeste Clone")
         self.win.requestProperties(props)
 
         # Cap framerate to 60fps
-        globalClock.setMode(ClockObject.M_limited)
-        globalClock.setFrameRate(60)
-        # -----------------------------------
-        # CAMERA
-        # -----------------------------------
+    
+        
 
         lens = OrthographicLens()
         lens.setFilmSize(40, 22)
@@ -35,9 +28,7 @@ class Game(ShowBase):
         self.shake_timer = 0.0
         self.shake_intensity = 0.0
 
-        # -----------------------------------
-        # WORLD
-        # -----------------------------------
+   
 
         self.level = Level(self)
         self.player = Player(self, self.level)
@@ -47,9 +38,11 @@ class Game(ShowBase):
         self.DEATH_DELAY = 0.6  # seconds before respawn
 
         self.taskMgr.add(self.update, "update")
-
+        
     def update(self, task):
-        dt = globalClock.getDt()
+        dt=self.clock.getDt()
+        
+
         # Screen shake
         if self.shake_timer > 0:
             self.shake_timer -= dt
