@@ -1,7 +1,7 @@
 from panda3d.core import Vec3
 from direct.actor.Actor import Actor
 from direct.showbase.DirectObject import DirectObject
-
+from panda3d.core import CardMaker
 # Tuning constants — tweak these to feel right
 MOVE_SPEED       = 10.0
 ACCELERATION     = 60.0
@@ -13,24 +13,30 @@ JUMP_BUFFER_TIME = 0.1   # seconds before landing that jump input is remembered
 DEATH_PLANE= -20.0
 PLAYER_W = 0.8
 PLAYER_H = 1.0
+MAX_JUMPS=2
 
 
 class Player(DirectObject):
 
     def __init__(self, base, level):
         super().__init__()
+        self.jumps_left=MAX_JUMPS
+        self.base = base
+        self.level=level
+        self.x = float(self.level.spawn.x)
+        self.z = float(self.level.spawn.z)
         self.jump_held=False
         
 
-        self.base = base
-        self.level = level
+    
 
         # Visual player model
-        self.node = base.loader.loadModel("models/smiley")
+        self.node = base.loader.loadModel("models/box")
+        self.node.reparentTo(base.render)
         self.node.reparentTo(base.render)
         self.node.setScale(PLAYER_W / 2, 0.5, PLAYER_H / 2)
-        self.node.setColor(1.0, 0.34, 0.78, 1)
-
+        #self.node.setColor(1.0, 0.34, 0.78, 1)
+       
         # Spawn position
         self.x = float(self.level.spawn.x)
 
@@ -52,7 +58,12 @@ class Player(DirectObject):
         # Input state
         self.left = False
         self.right = False
-
+        cm = CardMaker("player")
+        cm.setFrame(-PLAYER_W / 2, PLAYER_W / 2, -PLAYER_H / 2, PLAYER_H / 2)
+        self.node = base.render.attachNewNode(cm.generate())
+        self.node.setPos(self.x, 0, self.z)
+        tex=base.loader.loadTexture("guy.png")
+        self.node.setTexture(tex)
         # Controls
         self.accept("a", self.set_left, [True])
         self.accept("a-up", self.set_left, [False])
@@ -93,6 +104,7 @@ class Player(DirectObject):
         # Variable jump height
         if self.vz > 0:
             self.vz *= 0.5
+        if self.jump_buffer_timer>0 and (can_jump or self.jumps_l)
 
   
     def is_dead(self):

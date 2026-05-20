@@ -7,6 +7,7 @@ from player import Player
 class Game(ShowBase):
     def __init__(self):
         super().__init__()
+        lens=OrthographicLens()
         lens.setFov(45)
         self.setBackgroundColor(0.1, 0.1, 0.15, 1)
         self.disableMouse()

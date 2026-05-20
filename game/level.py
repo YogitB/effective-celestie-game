@@ -135,10 +135,7 @@ class Level:
             # Spawn point: top-center of the tile, so player stands on it
             self.spawn = Vec3(x, 0, z + TILE_SIZE)
         if tile.is_goal:
-            self.goal = Vec3(x, 0, z + TILE_SIZE)
-
-    # 
-    # 
+            self.goal = Vec3(x, 0, z + TILE_SIZE) 
 
     def get_solid_tiles(self) -> list[Tile]:
         return [t for t in self.tiles if t.solid]
